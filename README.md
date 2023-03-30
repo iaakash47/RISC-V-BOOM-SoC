@@ -31,3 +31,11 @@ Many of those stages are combined in the current implementation, yielding seven 
 * Memory - The Load/Store Unit consists of three queues: a Load Address Queue (LAQ), a Store Address Queue (SAQ), and a Store Data Queue (SDQ). Loads are   fired to memory when their address is present in the LAQ. Stores are fired to memory at Commit time
 
 * Writeback - ALU operations and load operations are written back to the Physical Register File.
+
+# How Does RISC-V BOOM CPU Cache Work and What Are L1, L2 Cache?
+* Cache is just a really fast type of memory and the CPU cache stands at the top of this hierarchy, being the fastest,cache memory operates between 10 to   100 times faster than RAM
+* CPU Cache memory is divided into three levels: L1, L2, and L3
+  L1 (Level 1) cache is the fastest memory that is present in a computer system/BOOM system. In terms of priority of access, the L1 cache has the data     the CPU is most likely to need while completing a certain task.
+  The L1 cache is usually split into two sections: the instruction cache and the data cache. The instruction cache deals with the information about the     operation that the CPU must perform, while the data cache holds the data on which the operation is to be performed.
+  
+  L2 (Level 2) cache is slower than the L1 cache but bigger in size. Where an L1 cache may measure in kilobytes, modern L2 memory caches measure in 512kb   in Boom SoC (kilobytes to megabytes) The L2 cache size varies depending on the CPU, but its size is typically between 256KB to 32MB and When it comes     to speed, the L2 cache lags behind the L1 cache but is still much faster than your system RAM

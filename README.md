@@ -19,6 +19,8 @@ The Berkeley Out-of-Order Machine (BOOM) is a synthesizable and parameterizable 
 
 ## Rocket Chip SoC Generator Architecture 
 ![chip](https://user-images.githubusercontent.com/88897605/229102201-44804a08-e1c1-4595-a336-73b50c44833b.png)
+* As BOOM is just a core, an entire SoC infrastructure must be provided. BOOM was developed to use the open-source Rocket Chip SoC generator. The Rocket Chip generator can instantiate a wide range of SoC designs, including cache-coherent multi-tile designs, cores with and without accelerators, and chips with or without a last-level shared cache. It comes bundled with a 5-stage in-order core, called Rocket, by default. BOOM uses the Rocket Chip infrastructure to instantiate it’s core/tile complex (tile is a core, L1D/I$, and PTW) instead of a Rocket tile.
+* Rocket that are also used by BOOM - the functional units, the caches, the translation look-aside buffers (TLBs), the page table walker (PTW), and more
 
 ## The BOOM Pipeline
 BOOM is broken up into 10 stages: Fetch, Decode, Register Rename, Dispatch, Issue, Register Read, Execute, Memory, Writeback and Commit. 

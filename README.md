@@ -11,11 +11,16 @@ Export methods
 The methods implemented in SystemVerilog can be called from Foreign language such methods are called Export methods.
 
 
-#BOOM System on Chip
+## BOOM System on Chip Architecture
 
 The Berkeley Out-of-Order Machine (BOOM) is a synthesizable and parameterizable open-source RISC-V out-of-order core written in the Chisel hardware construction language. Because Chisel does not support blocking assignments, it is impossible to create a deterministic divided clock.
 
-# The BOOM Pipeline
+![boom-pipeline-detailed](https://user-images.githubusercontent.com/88897605/229101205-d68503f4-b6b9-4db0-904b-bc45e3bb90fd.jpg)
+
+## Rocket Chip SoC Generator Architecture 
+![chip](https://user-images.githubusercontent.com/88897605/229102201-44804a08-e1c1-4595-a336-73b50c44833b.png)
+
+## The BOOM Pipeline
 BOOM is broken up into 10 stages: Fetch, Decode, Register Rename, Dispatch, Issue, Register Read, Execute, Memory, Writeback and Commit. 
 Many of those stages are combined in the current implementation, yielding seven stages: Fetch, Decode/Rename, Rename/Dispatch, Issue/RegisterRead, Execute, Memory and Writeback stages of pipleine.
 

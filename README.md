@@ -54,4 +54,30 @@ Many of those stages are combined in the current implementation, yielding seven 
 From BOOM’s point of view, the Rocket core can be thought of as a “Library of Processor Components.” There are a number of modules created for Rocket that are also used by BOOM - the functional units, the caches, the translation look-aside buffers (TLBs), the Page Table Walker (PTW), and more. Throughout this document you will find references to these Rocket components and descriptions on how they fit into BOOM.
 
 
+## Core Overview
 
+### Instruction Fetch
+![image](https://user-images.githubusercontent.com/88897605/229439211-04bc40c4-8b94-4615-aef1-9fabb4379413.png)
+BOOM instantiates its own Front-end , similar to how the Rocket core(s) instantiates its own Front-end . This Front-end fetches instructions and makes predictions throughout the Fetch stage to redirect the instruction stream in multiple fetch cycles (F0, F1…). If a misprediction is detected in BOOM’s Back-end (execution pipeline), or one of BOOM’s own predictors wants to redirect the pipeline in a different direction, a request is sent to the Front-end and it begins fetching along a new instruction path.
+
+### The Rocket Core I-Cache
+
+BOOM instantiates the i-cache taken from the Rocket processor source code. The i-cache is a virtually indexed, physically tagged set-associative cache.
+To save power, the i-cache reads out a fixed number of bytes (aligned) and stores the instruction bits into a register. Further instruction fetches can be managed by this register. The i-cache is only fired up again once the fetch register has been exhausted (or a branch prediction directs the PC elsewhere). The i-cache does not (currently) support fetching across cache-lines, nor does it support fetching unaligned relative to the superscalar fetch address. The i-cache does not (currently) support hit-under-miss. If an i-cache miss occurs, the i-cache will not accept any further requests until the miss has been handled. This is less than ideal for scenarios in which the pipeline discovers a branch mispredict and would like to redirect the i-cache to start fetching along the correct path.
+
+#### The Fetch Buffer
+Fetch Packet s coming from the i-cache are placed into a Fetch Buffer . The Fetch Buffer helps to decouple the instruction fetch Front-end from the execution pipeline in the Back-end .The Fetch Buffer is parameterizable. The number of entries can be changed and whether the buffer is implemented as a “flow-through” queue or not can be toggled.
+
+###### Instruction Cache - An instruction cache is a cache that is accessed only as a result of an instruction fetch. Therefore, an instruction cache is never written to by any load or store instruction executed by the processor
+
+#### Branch Prediction
+BOOM uses two levels of branch prediction - a fast Next-Line Predictor (NLP) and a slower but more complex Backing Predictor (BPD). In this case, the NLP is a Branch Target Buffer and the BPD is a more complicated structure like a GShare predictor.
+
+#### The Decode Stage
+The Decode stage takes instructions from the Fetch Buffer, decodes them, and allocates the necessary resources as required by each instruction. The Decode stage will stall as needed if not all resources are available.
+
+#### The Rename Stage
+The Rename stage maps the ISA (or logical) register specifiers of each instruction to physical register specifiers.
+
+###### The Purpose of Renaming
+Renaming is a technique to rename the ISA (or logical) register specifiers in an instruction by mapping them to a new space of physical registers. The goal to register renaming is to break the output-dependencies (WAW) and anti-dependences (WAR) between instructions, leaving only the true dependences (RAW)

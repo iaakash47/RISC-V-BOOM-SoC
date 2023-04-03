@@ -17,10 +17,6 @@ The Berkeley Out-of-Order Machine (BOOM) is a synthesizable and parameterizable 
 
 ![boom-pipeline-detailed](https://user-images.githubusercontent.com/88897605/229101205-d68503f4-b6b9-4db0-904b-bc45e3bb90fd.jpg)
 
-## Rocket Chip SoC Generator Architecture 
-![chip](https://user-images.githubusercontent.com/88897605/229102201-44804a08-e1c1-4595-a336-73b50c44833b.png)
-* As BOOM is just a core, an entire SoC infrastructure must be provided. BOOM was developed to use the open-source Rocket Chip SoC generator. The Rocket Chip generator can instantiate a wide range of SoC designs, including cache-coherent multi-tile designs, cores with and without accelerators, and chips with or without a last-level shared cache. It comes bundled with a 5-stage in-order core, called Rocket, by default. BOOM uses the Rocket Chip infrastructure to instantiate it’s core/tile complex (tile is a core, L1D/I$, and PTW) instead of a Rocket tile.
-* Rocket that are also used by BOOM - the functional units, the caches, the translation look-aside buffers (TLBs), the page table walker (PTW), and more
 
 ## The BOOM Pipeline
 BOOM is broken up into 10 stages: Fetch, Decode, Register Rename, Dispatch, Issue, Register Read, Execute, Memory, Writeback and Commit. 
@@ -40,9 +36,22 @@ Many of those stages are combined in the current implementation, yielding seven 
 * Writeback - ALU operations and load operations are written back to the Physical Register File.
 
 # How Does RISC-V BOOM CPU Cache Work and What Are L1, L2 Cache?
-* Cache is just a really fast type of memory and the CPU cache stands at the top of this hierarchy, being the fastest,cache memory operates between 10 to   100 times faster than RAM
+* Cache is just a really fast type of memory and the CPU cache stands at the top of this hierarchy, being the fastest,cache memory operates between 10 to 100 times faster than RAM
 * CPU Cache memory is divided into three levels: L1, L2, and L3
-  *L1 (Level 1) cache is the fastest memory that is present in a computer system/BOOM system. In terms of priority of access, the L1 cache has the data     the CPU is most likely to need while completing a certain task.
-  The L1 cache is usually split into two sections: the instruction cache and the data cache. The instruction cache deals with the information about the     operation that the CPU must perform, while the data cache holds the data on which the operation is to be performed.
+* L1 (Level 1) cache is the fastest memory that is present in a computer system/BOOM system. In terms of priority of access, the L1 cache has the data the CPU is most likely to need while completing a certain task.
+  The L1 cache is usually split into two sections: the instruction cache and the data cache. The instruction cache deals with the information about the operation that the CPU must perform, while the data cache holds the data on which the operation is to be performed.
   
-  *L2 (Level 2) cache is slower than the L1 cache but bigger in size. Where an L1 cache may measure in kilobytes, modern L2 memory caches measure in       512kb in Boom SoC (kilobytes to megabytes) The L2 cache size varies depending on the CPU, but its size is typically between 256KB to 32MB and When it     comes to speed, the L2 cache lags behind the L1 cache but is still much faster than your system RAM
+* L2 (Level 2) cache is slower than the L1 cache but bigger in size. Where an L1 cache may measure in kilobytes, modern L2 memory caches measure in 512kb in Boom SoC (kilobytes to megabytes) The L2 cache size varies depending on the CPU, but its size is typically between 256KB to 32MB and When it comes to speed, the L2 cache lags behind the L1 cache but is still much faster than your system RAM
+
+
+## Rocket Chip SoC Generator Architecture 
+![chip](https://user-images.githubusercontent.com/88897605/229102201-44804a08-e1c1-4595-a336-73b50c44833b.png)
+* As BOOM is just a core, an entire SoC infrastructure must be provided. BOOM was developed to use the open-source Rocket Chip SoC generator. The Rocket Chip generator can instantiate a wide range of SoC designs, including cache-coherent multi-tile designs, cores with and without accelerators, and chips with or without a last-level shared cache. It comes bundled with a 5-stage in-order core, called Rocket, by default. BOOM uses the Rocket Chip infrastructure to instantiate it’s core/tile complex (tile is a core, L1D/I$, and PTW) instead of a Rocket tile.
+* Rocket that are also used by BOOM - the functional units, the caches, the translation look-aside buffers (TLBs), the page table walker (PTW), and more
+
+## The Rocket Core - a Library of Processor Components
+
+From BOOM’s point of view, the Rocket core can be thought of as a “Library of Processor Components.” There are a number of modules created for Rocket that are also used by BOOM - the functional units, the caches, the translation look-aside buffers (TLBs), the Page Table Walker (PTW), and more. Throughout this document you will find references to these Rocket components and descriptions on how they fit into BOOM.
+
+
+
